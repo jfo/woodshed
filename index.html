@@ -8,12 +8,10 @@
     <div id="scale"></div>
     <div id="quality"></div>
     <div id="attack"></div>
-    <button onClick="scale()">scale</button>
+    <button onClick="scale(random)">scale</button>
   </body>
 
   <script>
-    const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
     const scales = [
       "C",
       "G",
@@ -37,23 +35,33 @@
       "Harmonic Major",
     ];
 
-    const attacks = [
-      "Alternate",
-      "Full Legato",
-      "Half Legato",
-      "Economy",
-    ];
+    const attacks = ["Alternate", "Full Legato", "Half Legato", "Economy"];
 
     const scaleDiv = document.getElementById("scale");
     const qualityDiv = document.getElementById("quality");
     const attackDiv = document.getElementById("attack");
 
-    function scale() {
-      scaleDiv.innerHTML = random(scales);
-      qualityDiv.innerHTML = random(qualities);
-      attackDiv.innerHTML = random(attacks);
+    const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const date = new Date();
+    let seed = parseInt(
+      `${date.getFullYear()}${date.getMonth + 1}${date.getDate()}`
+    );
+
+    const psuedoRandom = function (arr) {
+      const a = 1664525;
+      const c = 10139042223;
+      const m = Math.pow(2, 32);
+
+      seed = (a * seed + c) % m;
+      return arr[Math.floor((seed / m) * arr.length)];
+    };
+
+    function scale(rand) {
+      scaleDiv.innerHTML = rand(scales);
+      qualityDiv.innerHTML = rand(qualities);
+      attackDiv.innerHTML = rand(attacks);
     }
-    scale();
+    scale(psuedoRandom);
   </script>
 
   <!-- 100% privacy-first analytics -->
